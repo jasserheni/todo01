@@ -133,3 +133,9 @@ li {
 input[type="checkbox"]:checked + label.strikethrough {
   text-decoration: line-through;
 }
+img {
+  width: 45px;
+}
+.strikethrough {
+  font-size: xx-large;
+}

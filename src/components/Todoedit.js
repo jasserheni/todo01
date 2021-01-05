@@ -1,33 +1,64 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Modal from "react-modal";
 import { useDispatch } from "react-redux";
-import { addTodo } from "../redux/Actions/todoActions";
-const AddTodo = () => {
-  const [text, setText] = useState("");
+import { editTodo } from "../redux/Actions/todoActions";
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+  },
+};
 
+Modal.setAppElement("#root");
+
+const EditTodo = ({ el }) => {
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [editText, setEditText] = useState(el.text);
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
   const dispatch = useDispatch();
-  const add = () => {
-    dispatch(addTodo({ id: Math.random(), isComplete: false, text: text }));
-    setText("");
+  const editt = () => {
+    dispatch(editTodo({ index: el.id, editedText: editText }));
+    closeModal();
   };
   return (
-    <div className="Input-Containers">
-      <div className="add-elements">
-        <h1>Don't Forget to ...</h1>
-        <h4></h4>
+    <div>
+      <button className="btn" onClick={openModal}>
+      <img  src='edit.png' alt='edit' />
+      </button>
+
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
         <input
+          id="ModalInput"
           type="text"
-          id="myInput"
-          placeholder=""
-          value={text}
-          onChange={(e) => setText(e.target.value)}
+          placeholder="Edit to do..."
+          value={editText}
+          onChange={(e) => setEditText(e.target.value)}
         />
-        <br />
-        <button className="add-Btn" onClick={add}>
-          Add
+        <button className="Modal-Btn" onClick={editt}>
+          Save
         </button>
-      </div>
+        <button className="Modal-Btn" onClick={closeModal}>
+          close
+        </button>
+      </Modal>
     </div>
   );
 };
 
-export default AddTodo;
+export default EditTodo;
